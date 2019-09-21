@@ -18,6 +18,6 @@ public interface BookingService {
     public Booking bookSlot(Booking booking);
 
     @ServiceMethod
-    public List<Slot> checkAvailability(Game game, Slot slot);
+    public List<Slot> checkAvailability(Booking booking) throws Exception;
 
 }

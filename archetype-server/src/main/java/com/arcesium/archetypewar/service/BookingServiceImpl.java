@@ -8,6 +8,7 @@ import com.arcesium.archetypewar.domain.Slot;
 import com.arcesium.archetypewar.domain.utils.SlotUtil;
 
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.List;
 
 public class BookingServiceImpl implements BookingService {
@@ -28,11 +29,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Slot> checkAvailability(Game game, Slot slot) {
-        List<Integer> slotIds = SlotUtil.getSlotIds(slot);
-        for(Integer slotId : slotIds){
-
+    public List<Slot> checkAvailability(Booking booking) throws Exception {
+        if(booking == null){
+            return null;
         }
+        Slot slot = booking.getSlot();
+        List<Integer> slotIds = SlotUtil.getSlotIds(slot);
+        final Date date = slot.getStartTime().toDate();
+        assert slotIds != null;
+        if(booking.getGame()== null){
+            throw new Exception("Game is not selected");
+        }
+        searchDao.checkSlot(slotIds.get(0), slotIds.get(1), booking.getGame().getId(), booking.getPlayerCount(), date);
         return null;
     }
 }
