@@ -4,9 +4,9 @@ import com.arcesium.archetypewar.domain.Game;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface SearchDao {
-    public String checkSlot(Integer startId, Integer endId, int id,int playerCount, Date date);
-
     List<Game> getGames();
+    public Map checkSlot(Integer startId, Integer endId, Game game, int playerCount, Date date);
 }
