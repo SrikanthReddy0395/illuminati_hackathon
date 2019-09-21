@@ -8,7 +8,8 @@ public class Booking {
     private Game game;
     private List<User> players;
     private int playerCount;
-    private Slot slot;
+    private int startTime;
+    private int endTime;
 
     public int getBookingId() {
         return bookingId;
@@ -50,11 +51,19 @@ public class Booking {
         this.playerCount = playerCount;
     }
 
-    public Slot getSlot() {
-        return slot;
+    public int getStartTime() {
+        return startTime;
     }
 
-    public void setSlot(Slot slot) {
-        this.slot = slot;
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(int endTime) {
+        this.endTime = endTime;
     }
 }
