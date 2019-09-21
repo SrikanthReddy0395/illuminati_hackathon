@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="playnamespace">
-    <resultMap id="booking">
+    <resultMap id="booking" type="com.arcesium.archetypewar.domain.Booking">
         <result property="name" column="name" />
         <result property="startTime" column="start_time" />
         <result property="endTime" column="end_time" />
