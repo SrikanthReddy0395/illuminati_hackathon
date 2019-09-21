@@ -1,15 +1,4 @@
-# Arcesium Gradle Archetype (Multi-Module)
-
-This provides a template for gradle based multi-module web application. 
-
-## Features
-  * Runs on Gradle 5.2
-  * Compatible with Java 11
-  * Integrated with Frames 6.x
-  * Metric collection is embedded
-  * Uses arcesium-commons for most of its functions
-
-## Startup Command
+# Arcesium Hackathon
 
   * Use service director to start  bash console with associated dns
 `> sdexec -s u/$USER/dev-arc --dnsentry A:$USER-dev-arc.nyc.deshaw.com --keytab --multi /bin/bash`
