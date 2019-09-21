@@ -4,10 +4,24 @@
 
 <mapper namespace="playnamespace">
     <resultMap id="booking" type="com.arcesium.archetypewar.domain.Booking">
-        <result property="name" column="name" />
+        <result property="bookingId" column="booking_id" />
+        <result property="user.userId" column="booked_by_id" />
+        <result property="user.userName" column="booked_by" />
+        <result property="game.id" column="game_id"/>
+        <result property="game.name" column="game_name"/>
+        <result property="game.minCapacity" column="min_capacity"/>
+        <result property="game.maxCapacity" column="max_capacity"/>
+        <collection property="players" resultMap="user"/>
+        <result property="playerCount" column="count" />
         <result property="startTime" column="start_time" />
         <result property="endTime" column="end_time" />
-        <result property="bookedBy" column="booked_by" />
+        <result property="date" column="date" />
+    </resultMap>
+
+
+    <resultMap id="user" type="com.arcesium.archetypewar.domain.User">
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
     </resultMap>
 
     <select id = "gameAvailable">
@@ -38,34 +52,24 @@
     </delete>
 
     <select id = "viewBookings" resultMap = "booking">
-        SELECT name, start_time, end_time, booked_by from
-        (select u.name as booked_by , start_time, end_time, player_id
+
+        SELECT booking_id, booked_by_id, booked_by, game_id, game_name, min_capacity, max_capacity, start_time, end_time, booking_date from
+        (select u.name as booked_by , start_time, end_time, booking_date,  b.user_id as booked_by_id, g.game_id as game_id,
+        g.name as game_name, b.booking_id as booking_id, min_capacity, max_capacity
         from sandbox.guest.play_bookings b
         JOIN sandbox.guest.play_booking_players p
         ON b.booking_id = p.booking_id
         join sandbox.guest.play_users as u
         on b.user_id = u.user_id
+        join sandbox.guest.play_games g
+        on g.game_id = b.game_id
         where b.game_id = #{gameId}
         and booking_date = #{date}
         and ((start_time between #{startTime} and #{endTime}) or
         (end_time between #{startTime} and #{endTime}) or
         (start_time &lt;= #{startTime} and end_time &gt;= #{endTime}) or
         (start_time &gt;= #{startTime} and end_time &lt;= #{end_time}))) a
-        join sandbox.guest.play_users us
-        on us.user_id = a.player_id
-    </select>
-
-    <select id = "viewBookingsByDate" resultMap = "booking">
-        SELECT name, start_time, end_time, booked_by from
-        (select u.name as booked_by , start_time, end_time, player_id
-        from sandbox.guest.play_bookings b
-        JOIN sandbox.guest.play_booking_players p
-        ON b.booking_id = p.booking_id
-        join sandbox.guest.play_users as u
-        on b.user_id = u.user_id
-        where b.game_id = #{gameId}) a
-        join sandbox.guest.play_users us
-        on us.user_id = a.player_id
+        GROUP By booking_id, booked_by_id, booked_by, game_id, game_name, min_capacity, max_capacity, start_time, end_time, booking_date
     </select>
 
     <select id = "GetAllGames" resultSets="games">
