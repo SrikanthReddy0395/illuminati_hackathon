@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Data Source -->
+    <bean id="sandboxSqlDataSource"  class="com.arcesium.commons.db.ArcDataSource">
+
+        <property name="url" value="jdbc:jtds:sqlserver://dbcore1.jupiter.c.ia55.net/;useKerberos=true" />
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+
+        <!--property name="url" value="jdbc:postgresql://dbpostgres.jupiter.c.ia55.net:5432/geneva_warehouse" />
+        <property name="driverClassName" value="org.postgresql.Driver" /-->
+        <!--property name="username" value="***" />
+        <property name="password" value="*********" /-->
+
+
+        <property name="applicationName" value="${codex.resource.name}" />
+        <property name="maxWait" value="1500" />
+        <property name="maxAge" value="1200" />
+        <property name="initialSize" value="2" />
+        <property name="validationQuery">
+            <value>SELECT 1</value>
+        </property>
+    </bean>
+
+    <!-- SqlSessionFactory -->
+    <bean id="sandboxSqlDataSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:com/arcesium/archetypewar/dao/mybatis/sql-map-config.xml" />
+        <property name="dataSource" ref="sandboxSqlDataSource" />
+    </bean>
+
+    <!-- Sql Session Template -->
+    <bean id="sandboxSqlDaoTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sandboxSqlDataSqlSessionFactory" />
+    </bean>
+
+    <!-- Dao class beans -->
+    <bean id="tradeDao" class="com.arcesium.archetypewar.dao.TradeDaoImpl">
+        <property name="sqlSessionTemplate" ref="sandboxSqlDaoTemplate" />
+    </bean>
+
+    <bean id="employeeDao" class="com.arcesium.archetypewar.dao.EmployeeDaoImpl">
+        <property name="sqlSessionTemplate" ref="sandboxSqlDaoTemplate" />
+    </bean>
+
+</beans>

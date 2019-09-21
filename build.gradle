@@ -1,0 +1,105 @@
+/* Dependencies to understand rest of the build script */
+buildscript {
+    ext.kotlinVersion = '1.2.30'
+    ext.cogLightPluginVersion = '20170916-RC1'     
+
+    repositories {
+        maven {
+            url 'http://maven.ia55.net/arcesium/'
+        }
+    }
+    dependencies {
+        classpath "com.arcesium.frames:cog-light-plugin:$cogLightPluginVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion" // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion"
+    }
+}
+
+/* Plugins to be used by the project */
+plugins {
+    id 'io.spring.dependency-management' version '1.0.4.RELEASE'
+}
+
+/* Default commonly use variables */
+ext {
+    // Dependency version management
+    mavenParentVersion = '6.3.6.RELEASE'
+    framesVersion = '6.0.1.RC4'
+
+    // VM args and System properties
+    customJvmArgs =''
+    customSystemProperties = ['sun.security.jgss.native': 'true',
+                              'sun.security.jgss.lib': '/usr/local/libexec/libgsswrap.so',
+                              'user.timezone': 'UTC',
+                              'catalina.base': "${buildDir}",
+                              'frames.light.convertToETfromLocalTimeZone':'true'
+                             ]
+}
+
+/* Configurations for root project + all sub-projects */
+allprojects {
+    group = 'com.arcesium.archetypewarmm'
+    version = 'TRUNK-SNAPSHOT'
+
+    repositories {
+        maven {
+            url 'http://maven.ia55.net/arcesium/'
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    
+    /* do not apply the below plugins for cogging light module */
+    if (!it.name.contains('light')) {
+        apply plugin: 'kotlin'
+        apply plugin: 'kotlin-spring' // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin
+        apply plugin: 'kotlin-noarg'
+        apply plugin: 'kotlin-allopen'
+
+	compileKotlin {
+            kotlinOptions.jvmTarget = "1.8"
+            kotlinOptions.javaParameters = true
+        }
+
+        compileTestKotlin {
+            kotlinOptions.jvmTarget = "1.8"
+            kotlinOptions.javaParameters = true
+        }
+    }
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'jacoco'
+
+    sourceCompatibility = 1.8
+
+    compileJava {
+        options.compilerArgs = ['-parameters']
+    }
+
+    test {
+        jvmArgs(customJvmArgs)
+        systemProperties(customSystemProperties)
+    }
+
+    // commons-logging and log4j shouldn't directly be used and rather bridges to slf4j are a better idea.
+    // Hence, exclude these (and any others) from the configuration (no matter from where they come to the classpath)
+    configurations {
+        compile.exclude group:'commons-logging', module:'commons-logging'
+        compile.exclude group:'log4j', module:'log4j'
+        compile.exclude group:'org.slf4j', module:'slf4j-log4j12'
+        compile.exclude group:'org.apache.logging.log4j', module:'log4j-core'
+    }
+
+    dependencyManagement {
+         imports {
+              mavenBom "com.arcesium.commons:maven-parent:${mavenParentVersion}"
+         }
+         dependencies {
+              dependency "com.arcesium.frames:frames:${framesVersion}"
+              dependency "com.arcesium.frames:frames-common:${framesVersion}"
+              dependency "com.arcesium.frames:frames-client:${framesVersion}"
+         }
+    }
+}

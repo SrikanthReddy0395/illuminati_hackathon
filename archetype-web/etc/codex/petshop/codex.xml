@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<codex xsi:schemaLocation="http://codex.ia55.net http://codex.ia55.net/xsd/codex-1.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://codex.ia55.net">
+   <category name="PHOENIX_PROFILE">
+      <boolean name="healthcheck.enabled">
+	 <defaultValue>false</defaultValue>
+      </boolean>
+      <string name="healthcheck.context">
+	 <defaultValue>/swagger-ui.html</defaultValue>
+      </string>
+      <integer name="cpu_count">
+         <defaultValue>1</defaultValue>
+      </integer>
+      <integer name="exit_timeout">
+         <defaultValue>60</defaultValue>
+      </integer>
+      <integer name="http_port">
+         <defaultValue>11355</defaultValue>
+      </integer>
+      <integer name="memory">
+         <defaultValue>1024</defaultValue>
+      </integer>
+      <string name="catalina_opts">
+         <defaultValue>-Ddeshaw.auth.trustedEffectiveUsers=gwdev,arcpocketdev -Xmx1g -Darc.resource.name=petshop -Dcodex.resource.name=petshop -Dcodex.environment.name=$MACHINE_CUSTOMER.$MACHINE_STABILITY -Dcodex.zkstore.name=ensemble-1.ia55.net -Dlogstash.host=logdev.ia55.net -Dlogstash.port=5523</defaultValue>
+      </string>
+      <string name="catalina_home">
+         <defaultValue>/usr/local/share/tomcat-7.0.84</defaultValue>
+      </string>
+      <string name="java_home">
+         <defaultValue>/usr/local/java/jdk9</defaultValue>
+      </string>
+      <string name="deploy_context">
+         <defaultValue>ROOT</defaultValue>
+      </string>
+      <string name="dnsname">
+         <defaultValue>petshop</defaultValue>
+      </string>
+      <string name="java_opts">
+	      <defaultValue>-Dcom.sun.management.jmxremote.port=11359 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false</defaultValue>
+      </string>
+      <string name="notification">
+         <defaultValue>viswanat@arcesium.com</defaultValue>
+      </string>
+      <string name="warfile">
+         <defaultValue>/local/lib/petshop/archetype-web.war</defaultValue>
+      </string>
+   </category>
+   <category name="PHOENIX_SERVER_XML">
+      <json name="server_xml_json">
+         <defaultValue>{
+  "ConnectorAJP": {
+    "protocol": "AJP/1.3",
+    "port": 11356
+  },
+  "Host": {
+    "unpackWARs": true,
+    "xmlValidation": false,
+    "name": "localhost",
+    "autoDeploy": true,
+    "xmlNamespaceAware": false
+  },
+  "ShutdownPort": 11357,
+  "ConnectorHttp": {
+    "maxThreads": 200,
+    "enableLookups": false,
+    "port": 11355,
+    "URIEncoding": "UTF-8",
+    "minSpareThreads": 25,
+    "disableUploadTimeout": true,
+    "maxSpareThreads": 75,
+    "acceptCount": 100,
+    "connectionTimeout": 20000,
+    "maxHttpHeaderSize": 16384,
+    "emptySessionPath": true
+  }
+}</defaultValue>
+      </json>
+   </category>
+</codex>

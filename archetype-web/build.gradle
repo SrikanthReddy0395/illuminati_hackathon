@@ -1,0 +1,155 @@
+/* Dependencies to understand rest of the build script */
+buildscript {
+    ext.kotlin_version = '1.2.30'
+    repositories {
+        maven {
+            url 'http://maven.ia55.net/arcesium/'
+        }
+    }
+    dependencies {
+        classpath 'arcesium.djsrv:cog-light-plugin:20161104-RC'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'war'
+apply plugin: 'kotlin'
+
+ext {
+    projectName = 'archetype-web'
+    initCommand = 'etc/init.sh'
+    webapps_context = 'ROOT'
+    kerberosKeytab = System.getenv("KRB5_KTNAME")
+
+    if (kerberosKeytab == null) {
+        logger.warn("[!] You don't have KRB5_KTNAME environment variable set. Get a keytab file and set it.")
+    }
+
+    catalinaOpts = '-Xmx2g -Dsun.security.jgss.native=true -Dsun.security.jgss.lib=/usr/local/libexec/libjgssfix.so ' +
+            '-Dlogstash.host=logdev.ia55.net -Dlogstash.port=5523 -Dmachine.customer=jupiter -Dmachine.stability=dev ' +
+            '-Ddeshaw.auth.authorization.authorizationDataLoader=deshaw.auth.authorization.delegate.DbAuthorizationDataLoader ' +
+            '-Ddeshaw.auth.authorization.schemaVersion=authorizationV1 -Ddeshaw.auth.authorization.serverHost=auth_staging ' +
+            '-Ddeshaw.auth.authorization.serverPort=7007 -Dcodex.zkstore.name=ensemble-dev-2.ia55.net ' +
+            '-Dsecurity-tools.environment.name=jupiter.dev -Darc.resource.name=munshi-core -Dcodex.environment.name=jupiter ' +
+            '-Dmachine.pod=jupiter'
+
+    catalinaHomeDir = System.getenv()['TOMCAT_HOME']
+
+    hostname = System.getenv()['HOSTNAME']
+    if (hostname != null && hostname.endsWith("ia55.net")) {
+        catalinaOpts = catalinaOpts + '-Ddeshaw.common.datelib.defaultLibraryPath=/local/lib/packages/datelib/ '
+    }
+}
+
+dependencies {
+    compile project(':archetype-server')
+    compileOnly 'javax.servlet:javax.servlet-api'
+    compile 'com.arcesium.frames:frames'
+    compile 'org.slf4j:slf4j-api'
+    compile 'org.springframework:spring-context'
+    compile 'javax.inject:javax.inject'
+    compile 'javax.annotation:javax.annotation-api'
+    compile 'deshaw:auth'
+    compile 'deshaw:webcommons'
+    compile 'org.samba.jcifs:jcifs'
+    compile 'deshaw.kerberos:kerberos'
+    compile 'com.arcesium.codex:codex-client'
+    compile 'com.arcesium.confmanager:confmanager'
+    compile 'com.arcesium:auth-helper:2.2.0'
+    compile 'com.arcesium.commons:commons-env'
+    compile 'com.arcesium.commons:commons-security'
+
+    runtime 'ch.qos.logback:logback-classic'
+    runtime 'org.slf4j:log4j-over-slf4j'
+    runtime 'org.slf4j:jcl-over-slf4j'
+    runtime 'net.logstash.logback:logstash-logback-encoder'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
+task start() {
+    dependsOn 'cleanDeployLocation'
+    dependsOn 'deployLocal'
+    doLast {
+        println ':' + projectName + ':start: Starting Tomcat'
+
+        if (!project.hasProperty('jmxPort')) {
+            throw new MissingPropertyException('pass jmxPort while starting server. Usage: ../gradlew start ' +
+            '-PjmxPort=<JMX-PORT-NO> [-PjmxPort=<JMX-PORT-NO>]')
+        } else {
+            catalinaOpts = catalinaOpts + " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxPort} " +
+                "-Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+        }
+
+        if (project.hasProperty('debugPort')) {
+            catalinaOpts = catalinaOpts + ' -Xdebug -Xrunjdwp:transport=dt_socket,address=${debugPort},server=y,suspend=n'
+        }
+
+        println "java opts used are: ${catalinaOpts}"
+        def stdOut = new ByteArrayOutputStream()
+        exec {
+            executable = initCommand
+            args = [catalinaHomeDir, kerberosKeytab, "start", catalinaOpts]
+            standardOutput = stdOut
+        }
+        println stdOut
+    }
+}
+
+task cleanDeployLocation (type: Delete) {
+
+    if (catalinaHomeDir == null) {
+        throw new MissingPropertyException("Set TOMCAT_HOME environment variable. setenv TOMCAT_HOME <path-to-tomcat>")
+    }
+
+    def webapps_context_name = "${catalinaHomeDir}/webapps/${webapps_context}"
+    delete webapps_context_name, "${webapps_context_name}.war"
+    doLast {
+        println "Dropped ${webapps_context_name}"
+    }
+}
+
+task deployLocal {
+    dependsOn 'build'
+    doLast {
+        println ":${projectName} :deployLocal: Deploying to Tomcat at ${catalinaHomeDir}/webapps/${webapps_context}"
+        copy {
+            from "${buildDir}/libs"
+            into catalinaHomeDir + '/webapps'
+            include '*.war'
+            rename(projectName + '.*war', "${webapps_context}.war")
+        }
+    }
+}
+
+deployLocal.mustRunAfter cleanDeployLocation
+
+task stop {
+    doFirst {
+        println ':' + projectName + ':stop: Stopping Tomcat'
+        try {
+            exec {
+                executable = initCommand
+                args = [catalinaHomeDir, "", "stop", ""]
+            }
+        }
+        catch (Throwable t) {
+            println t
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

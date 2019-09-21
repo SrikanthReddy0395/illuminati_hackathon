@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    id="WebApp_ID" version="3.0">
+
+    <!-- Filters -->
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>deshaw.propeq.webcommons.filter.AuthenticationFilter</filter-class>
+        <init-param>
+            <param-name>deshaw.auth.disableNtlm</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>EffectiveUserFilter</filter-name>
+        <filter-class>deshaw.propeq.webcommons.filter.EffectiveUserFilter</filter-class>
+        <init-param>
+            <param-name>deshaw.auth.effectiveuser.permissionhandler</param-name>
+            <param-value>deshaw.auth.authentication.IpBasedEffectiveUserPermissionHandler</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EffectiveUserFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CORS</filter-name>
+        <filter-class>com.arcesium.commons.security.filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CORS</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>LoggingFilter</filter-name>
+        <filter-class>com.arcesium.archetypewar.action.filter.LoggingFilter</filter-class>
+        <init-param>
+            <param-name>isELKMetricPublishEnabled</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>generateNewUniqueThreadName</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoggingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Context Listeners -->
+    <context-param>
+        <param-name>contextInitializerClasses</param-name>
+        <param-value>com.arcesium.confmanager.spring.ConfManagerApplicationContextInitializer</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:/com/arcesium/archetypewar/web/application-context.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- Servlets -->
+    <!-- Frames Remoting Servlet -->
+    <servlet>
+        <servlet-name>remoting</servlet-name>
+        <servlet-class>com.arcesium.frames.web.RemotingServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>remoting</servlet-name>
+        <url-pattern>/service/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Custom User Servlet -->
+    <servlet>
+        <servlet-name>dashboard</servlet-name>
+        <servlet-class>com.arcesium.archetypewar.action.servlet.DashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dashboard</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>search</servlet-name>
+        <jsp-file>/jsp/search.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>search</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+</web-app>

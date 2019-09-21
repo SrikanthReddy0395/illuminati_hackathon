@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:com/arcesium/archetypewar/dao/dao-context.xml" />
+
+    <bean id="employeeService" class="com.arcesium.archetypewar.service.EmployeeServiceImpl">
+        <property name="maxSize" value="5"/>
+        <property name="employeeDao" ref="employeeDao"/>
+    </bean>
+	
+	<bean id="tradeService" class="com.arcesium.archetypewar.service.TradeServiceImpl">
+        <constructor-arg ref = "tradeDao"/>
+    </bean>
+
+</beans>

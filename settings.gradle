@@ -1,0 +1,8 @@
+rootProject.name = 'archetype-war-mm'
+
+include 'archetype-common'
+include 'archetype-domain'
+include 'archetype-dao'
+include 'archetype-server'
+include 'archetype-web'
+include 'archetype-light'

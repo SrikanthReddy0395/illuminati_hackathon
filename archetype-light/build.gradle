@@ -1,0 +1,35 @@
+apply plugin: 'cogLight'
+apply plugin: 'maven'
+
+// Configuration for cogLight plugin
+cogLight {
+    propertiesFile = 'src/main/resources/cog-config.properties'
+    packageName = 'com.arcesium.archetypewar'
+    lightClassesListingFile = 'build/generated/lightJarClasses.txt'
+}
+
+dependencies {
+    compile project(':archetype-server')
+    compileOnly "com.arcesium.frames:frames"
+    runtime "com.arcesium.frames:frames-client:$framesVersion"
+    runtime "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+}
+
+jar.enabled = false
+jar.finalizedBy('lightJar')
+tasks.lightJar.baseName = 'petshop-light'
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    finalizedBy(lightJar)
+    classifier = 'sources'
+    from sourceSets.light.allSource
+}
+
+task writePoms() {
+    finalizedBy(lightJar)
+    pom().writeTo("$buildDir/pom.xml")
+}
+
+task generateLightArtifacts {
+    dependsOn(lightJar, sourcesJar, writePoms)
+}

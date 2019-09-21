@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<codex xsi:schemaLocation="http://codex.ia55.net http://codex.ia55.net/xsd/codex-1.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://codex.ia55.net">
+   <category name="GENERAL">
+      <string name="petshop_url">
+         <overrides>
+            <pod name="hydcodemill-dev">moss.jupiter.c.ia55.net</pod>
+            <pod name="jupiter">moss.jupiter.c.ia55.net</pod>
+         </overrides>
+      </string>
+   </category>
+</codex>

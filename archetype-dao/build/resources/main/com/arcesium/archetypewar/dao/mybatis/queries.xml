@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="employeenamespace">
+
+    <resultMap id="employeeDataMap" type="com.arcesium.archetypewar.domain.Employee">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="joiningDate" column="joining_date" />
+        <result property="level" column="level" />
+    </resultMap>
+
+    <sql id="employeeDataColumns">
+        id,
+        name,
+        joining_date,
+        level
+    </sql>
+
+
+    <select id="getEmployeeData" resultMap="employeeDataMap" parameterType="java.util.Map">
+        SELECT
+            <include refid="employeeDataColumns"/>
+        FROM sandbox..afaque_employee
+        WHERE 1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+
+    </select>
+
+</mapper>
