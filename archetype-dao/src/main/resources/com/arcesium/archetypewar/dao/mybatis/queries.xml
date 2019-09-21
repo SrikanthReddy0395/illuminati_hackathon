@@ -7,6 +7,7 @@
         <result property="name" column="name" />
         <result property="startTime" column="start_time" />
         <result property="endTime" column="end_time" />
+        <result property="bookedBy" column="booked_by" />
     </resultMap>
 
     <select id = "gameAvailable">
@@ -26,21 +27,13 @@
         and booking_date = #{date}
     </select>
 
-    <select id = "gameAvailableByDate">
-        select name, start_time, end_time
-        from sandbox.guest.play_bookings as b
-        join sandbox.guest.play_users as u
-        on b.user_id = u.user_id
-        where game_id = #{gameId}
-    </select>
-
     <insert id="insertBookingData">
         insert into sandbox.guest.play_bookings(
         booking_id, user_id ,game_id ,start_time ,end_time, booking_date)
         values(#{bookingId}, #{userId}, #{startTime}, #{endTime}, #{bookindDate});
     </insert>
 
-    <select id = "viewBookings">
+    <select id = "viewBookings" resultMap = "booking">
         SELECT name, start_time, end_time, booked_by from
         (select u.name as booked_by , start_time, end_time, player_id
         from sandbox.guest.play_bookings b
@@ -48,8 +41,8 @@
         ON b.booking_id = p.booking_id
         join sandbox.guest.play_users as u
         on b.user_id = u.user_id
-        where b.game_id = 1
-        and booking_date = '20190921'
+        where b.game_id = #{gameId}
+        and booking_date = #{date}
         and ((start_time between #{startTime} and #{endTime}) or
         (end_time between #{startTime} and #{endTime}) or
         (start_time &lt;= #{startTime} and end_time &gt;= #{endTime}) or
@@ -58,7 +51,7 @@
         on us.user_id = a.player_id
     </select>
 
-    <select id = "viewBookingsByDate">
+    <select id = "viewBookingsByDate" resultMap = "booking">
         SELECT name, start_time, end_time, booked_by from
         (select u.name as booked_by , start_time, end_time, player_id
         from sandbox.guest.play_bookings b
@@ -66,7 +59,7 @@
         ON b.booking_id = p.booking_id
         join sandbox.guest.play_users as u
         on b.user_id = u.user_id
-        where b.game_id = 1) a
+        where b.game_id = #{gameId}) a
         join sandbox.guest.play_users us
         on us.user_id = a.player_id
     </select>
