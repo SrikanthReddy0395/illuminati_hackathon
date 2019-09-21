@@ -1,8 +1,7 @@
 package com.arcesium.archetypewar.dao;
 
 import com.arcesium.archetypewar.domain.Booking;
-import com.arcesium.archetypewar.domain.Slot;
-import com.arcesium.archetypewar.domain.com.arcesium.archetypewar.domain.utils.SlotUtil;
+import com.arcesium.archetypewar.domain.utils.SlotUtil;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import java.util.HashMap;
