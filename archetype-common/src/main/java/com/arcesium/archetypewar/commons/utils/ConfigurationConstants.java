@@ -14,5 +14,5 @@ public class ConfigurationConstants {
 
     public static final String ARCHETYPEWAR_SERVER_DB_USER = "archetypewar.server.db.user";
 
-    public static final String ARCHETYPEWAR_SERVER_DB_PASSWORD = "archetypewar.server.db.password";
+    public static final String ARCHETYPEWAR_SERVER_DB_PASSWORD = "archetypewar.seut rver.db.password";
 }
