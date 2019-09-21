@@ -18,7 +18,6 @@ ext {
 }
 
 dependencies {
-    compile project(':archetype-domain')
     compile 'com.arcesium.frames:frames'
     compile 'org.slf4j:slf4j-api'
     compile 'org.springframework:spring-context'

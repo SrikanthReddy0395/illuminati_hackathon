@@ -1,11 +1,11 @@
 package com.arcesium.archetypewar.service;
 
-import com.arcesium.archetypewar.commons.utils.SlotUtil;
 import com.arcesium.archetypewar.dao.BookingDao;
 import com.arcesium.archetypewar.domain.Booking;
 import com.arcesium.archetypewar.domain.Game;
 import com.arcesium.archetypewar.domain.Slot;
 import com.arcesium.archetypewar.domain.User;
+import com.arcesium.archetypewar.utils.SlotUtil;
 
 import javax.inject.Inject;
 import java.util.List;
