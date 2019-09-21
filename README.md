@@ -1,4 +1,4 @@
-# Arcesium Hackathon
+# Arcesium Hackathon 2019
 
   * Use service director to start  bash console with associated dns
 `> sdexec -s u/$USER/dev-arc --dnsentry A:$USER-dev-arc.nyc.deshaw.com --keytab --multi /bin/bash`
