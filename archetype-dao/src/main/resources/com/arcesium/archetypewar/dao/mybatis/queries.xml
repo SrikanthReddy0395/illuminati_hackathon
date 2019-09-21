@@ -16,8 +16,16 @@
         'no'
         end as OverLapping
         from sandbox.guest.play_bookings
-        where game_id = 1
+        where game_id = #{game_id}
         and booking_date = #{date}
+    </select>
+
+    <select id = "gameAvailableByDate">
+        select name, start_time, end_time
+        from sandbox.guest.play_bookings as b
+        join sandbox.guest.play_users as u
+        on b.user_id = u.user_id
+        where game_id = #{game_id}
     </select>
 
 </mapper>
