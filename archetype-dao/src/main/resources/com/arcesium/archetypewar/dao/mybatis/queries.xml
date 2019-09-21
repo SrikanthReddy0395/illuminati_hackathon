@@ -33,6 +33,10 @@
         values(#{bookingId}, #{userId}, #{startTime}, #{endTime}, #{bookindDate});
     </insert>
 
+    <delete id="deleteSlot">
+        delete from sandbox.guest.play_bookings where booking_id = #{bookingId};
+    </delete>
+
     <select id = "viewBookings" resultMap = "booking">
         SELECT name, start_time, end_time, booked_by from
         (select u.name as booked_by , start_time, end_time, player_id
@@ -67,4 +71,6 @@
     <select id = "GetAllGames" resultSets="games">
             SELECT * from sandbox.guest.play_games
     </select>
+
+
 </mapper>

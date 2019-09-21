@@ -48,4 +48,11 @@ public class BookingServiceImpl implements BookingService {
     public List<Game> getGames() {
         return searchDao.getGames();
     }
+
+    @Override
+    public Booking cancelSlot(Booking booking) {
+        if(booking == null || booking.getUser().getUserId() == null || booking.getGame() == null || booking.getStartTime() == null || booking.getEndTime() == null)
+            return null;
+        return bookingDao.cancelSlot(booking);
+    }
 }

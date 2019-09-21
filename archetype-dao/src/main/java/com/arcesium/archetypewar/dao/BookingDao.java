@@ -4,5 +4,7 @@ import com.arcesium.archetypewar.domain.Booking;
 
 public interface BookingDao {
 
-    public Booking bookSlot(Booking booking);
+    Booking bookSlot(Booking booking);
+
+    Booking cancelSlot(Booking booking);
 }
