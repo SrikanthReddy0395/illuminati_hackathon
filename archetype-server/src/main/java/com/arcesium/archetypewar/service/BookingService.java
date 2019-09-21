@@ -20,4 +20,7 @@ public interface BookingService {
     @ServiceMethod
     public List<Slot> checkAvailability(Booking booking) throws Exception;
 
+    @ServiceMethod
+    public List<Game> getGames();
+
 }

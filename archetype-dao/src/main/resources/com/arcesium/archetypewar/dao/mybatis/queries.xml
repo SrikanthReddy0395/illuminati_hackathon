@@ -64,4 +64,7 @@
         on us.user_id = a.player_id
     </select>
 
+    <select id = "GetAllGames" resultSets="games">
+            SELECT * from sandbox.guest.play_games
+    </select>
 </mapper>

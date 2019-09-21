@@ -43,4 +43,9 @@ public class BookingServiceImpl implements BookingService {
         searchDao.checkSlot(slotIds.get(0), slotIds.get(1), booking.getGame().getId(), booking.getPlayerCount(), date);
         return null;
     }
+
+    @Override
+    public List<Game> getGames() {
+        return searchDao.getGames();
+    }
 }
