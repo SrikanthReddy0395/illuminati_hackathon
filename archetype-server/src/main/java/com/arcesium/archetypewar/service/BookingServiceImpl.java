@@ -3,6 +3,7 @@ package com.arcesium.archetypewar.service;
 import com.arcesium.archetypewar.dao.BookingDao;
 import com.arcesium.archetypewar.dao.SearchDao;
 import com.arcesium.archetypewar.domain.Booking;
+import com.arcesium.archetypewar.domain.Game;
 import com.arcesium.archetypewar.domain.Slot;
 
 import javax.inject.Inject;
@@ -46,5 +47,12 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Game> getGames() {
         return searchDao.getGames();
+    }
+
+    @Override
+    public Booking cancelSlot(Booking booking) {
+        if(booking == null || booking.getUser().getUserId() == null || booking.getGame() == null || booking.getStartTime() == null || booking.getEndTime() == null)
+            return null;
+        return bookingDao.cancelSlot(booking);
     }
 }

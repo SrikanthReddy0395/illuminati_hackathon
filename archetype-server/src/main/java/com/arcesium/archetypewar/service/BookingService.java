@@ -23,4 +23,6 @@ public interface BookingService {
     @ServiceMethod
     public List<Game> getGames();
 
+    @ServiceMethod
+    public Booking cancelSlot(Booking booking);
 }

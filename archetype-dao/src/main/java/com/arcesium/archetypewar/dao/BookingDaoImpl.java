@@ -25,4 +25,12 @@ public class BookingDaoImpl extends SqlSessionDaoSupport implements BookingDao {
         getSqlSession().insert("insertBookingData", param);
         return booking;
     }
+
+    @Override
+    public Booking cancelSlot(Booking booking) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("bookingId", booking.getBookingId());
+        getSqlSession().delete("deleteSlot", param);
+        return null;
+    }
 }
