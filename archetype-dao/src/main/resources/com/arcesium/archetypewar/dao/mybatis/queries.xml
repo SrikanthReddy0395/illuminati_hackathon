@@ -17,7 +17,7 @@
         end as OverLapping
         from sandbox.guest.play_bookings
         where game_id = 1
-        and booking_date = convert(date, '20190921')
+        and booking_date = #{date}
     </select>
 
 </mapper>
