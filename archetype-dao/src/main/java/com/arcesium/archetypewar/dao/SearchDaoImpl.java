@@ -1,14 +1,12 @@
 package com.arcesium.archetypewar.dao;
 
+import com.arcesium.archetypewar.domain.Game;
 import com.google.common.collect.ImmutableMap;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.google.common.collect.ImmutableMap.of;
 
@@ -33,5 +31,10 @@ public class SearchDaoImpl extends SqlSessionDaoSupport implements SearchDao {
         }
         return null;
 
+    }
+
+    @Override
+    public List<Game> getGames() {
+        return getSqlSession().selectList("GetAllGames");
     }
 }
