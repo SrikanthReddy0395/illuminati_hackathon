@@ -1,4 +1,4 @@
-package com.arcesium.archetypewar.domain.com.arcesium.archetypewar.domain.utils;
+package com.arcesium.archetypewar.domain.utils;
 
 import java.util.ArrayList;
 import java.util.List;
