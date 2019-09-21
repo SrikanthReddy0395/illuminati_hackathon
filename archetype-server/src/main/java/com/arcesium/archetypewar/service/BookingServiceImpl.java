@@ -3,6 +3,7 @@ package com.arcesium.archetypewar.service;
 import com.arcesium.archetypewar.dao.BookingDao;
 import com.arcesium.archetypewar.dao.SearchDao;
 import com.arcesium.archetypewar.domain.Booking;
+import com.arcesium.archetypewar.domain.Game;
 import com.arcesium.archetypewar.domain.Slot;
 
 import javax.inject.Inject;
@@ -39,7 +40,7 @@ public class BookingServiceImpl implements BookingService {
         if(booking.getGame()== null){
             throw new Exception("Game is not selected");
         }
-        searchDao.checkSlot(startSlot, endSlot, booking.getGame().getId(), booking.getPlayerCount(), date);
+        searchDao.checkSlot(startSlot, endSlot, booking.getGame(), booking.getPlayerCount(), date);
         return null;
     }
 
