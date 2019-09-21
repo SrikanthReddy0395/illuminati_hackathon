@@ -1,5 +1,6 @@
 package com.arcesium.archetypewar.domain;
 
+import java.util.Date;
 import java.util.List;
 
 public class Booking {
@@ -8,8 +9,9 @@ public class Booking {
     private Game game;
     private List<User> players;
     private int playerCount;
-    private int startTime;
-    private int endTime;
+    private Integer startTime;
+    private Integer endTime;
+    private Date date;
 
     public int getBookingId() {
         return bookingId;
@@ -51,7 +53,7 @@ public class Booking {
         this.playerCount = playerCount;
     }
 
-    public int getStartTime() {
+    public Integer getStartTime() {
         return startTime;
     }
 
@@ -59,11 +61,19 @@ public class Booking {
         this.startTime = startTime;
     }
 
-    public int getEndTime() {
+    public Integer getEndTime() {
         return endTime;
     }
 
     public void setEndTime(int endTime) {
         this.endTime = endTime;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
