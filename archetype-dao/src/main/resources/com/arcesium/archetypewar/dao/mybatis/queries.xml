@@ -3,6 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="playnamespace">
+    <resultMap id="booking">
+        <result property="name" column="name" />
+        <result property="startTime" column="start_time" />
+        <result property="endTime" column="end_time" />
+    </resultMap>
+    
     <select id = "gameAvailable">
         select
         case when
@@ -16,8 +22,16 @@
         'no'
         end as OverLapping
         from sandbox.guest.play_bookings
-        where game_id = 1
+        where game_id = #{game_id}
         and booking_date = #{date}
+    </select>
+
+    <select id = "gameAvailableByDate">
+        select name, start_time, end_time
+        from sandbox.guest.play_bookings as b
+        join sandbox.guest.play_users as u
+        on b.user_id = u.user_id
+        where game_id = #{game_id}
     </select>
 
 </mapper>
