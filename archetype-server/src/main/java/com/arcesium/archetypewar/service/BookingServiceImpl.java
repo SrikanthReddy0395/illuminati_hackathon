@@ -1,5 +1,6 @@
 package com.arcesium.archetypewar.service;
 
+import com.arcesium.archetypewar.commons.utils.SlotUtil;
 import com.arcesium.archetypewar.dao.BookingDao;
 import com.arcesium.archetypewar.domain.Booking;
 import com.arcesium.archetypewar.domain.Game;
@@ -26,5 +27,14 @@ public class BookingServiceImpl implements BookingService {
         booking.setUser(user);
         booking.setSlot(slot);
         return bookingDao.bookSlot(booking);
+    }
+
+    @Override
+    public List<Slot> checkAvailability(Game game, Slot slot) {
+        List<Integer> slotIds = SlotUtil.getSlotIds(slot);
+        for(Integer slotId : slotIds){
+
+        }
+        return null;
     }
 }
