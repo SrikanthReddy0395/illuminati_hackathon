@@ -1,4 +1,4 @@
-package com.arcesium.archetypewar.commons.utils;
+package com.arcesium.archetypewar.utils;
 
 import com.arcesium.archetypewar.domain.Slot;
 import org.joda.time.Duration;
