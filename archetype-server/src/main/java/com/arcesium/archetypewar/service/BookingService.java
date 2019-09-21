@@ -15,7 +15,7 @@ import java.util.List;
 public interface BookingService {
 
     @ServiceMethod
-    public Booking bookSlot(User user, Game game, Slot slot, List<User> players, int playerCount);
+    public Booking bookSlot(Booking booking);
 
     @ServiceMethod
     public List<Slot> checkAvailability(Game game, Slot slot);
